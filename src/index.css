@@ -5,6 +5,7 @@
   box-sizing: border-box;
   font-family: "Montserrat", sans-serif;
   font-family: "Roboto", sans-serif;
+  outline: 2px solid black !important;
 }
 :root {
   --primary-clr: #4743e0;

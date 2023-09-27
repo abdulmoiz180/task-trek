@@ -9,7 +9,7 @@ import {
 import { useState } from "react";
 import { useFormik } from "formik";
 import bgimg from "../assets/images/Layer 8.png";
-import { LoginSchema } from "./login/LoginSchema";
+import { LoginSchema } from "./LoginSchema";
 
 
 function MouseOver(event) {

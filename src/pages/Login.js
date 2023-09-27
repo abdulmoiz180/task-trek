@@ -8,7 +8,7 @@ import {
 } from "@ant-design/icons";
 import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
-import bgimg from "../assets/images/Layer 11.png";
+// import bgimg from "../assets/images/Layer 11.png";
 import { LoginSchema } from "./login/LoginSchema";
 
 
@@ -43,7 +43,7 @@ const Login = () => {
   return (
     <Row className="boxStyle">
       {/* 1st column */}
-    <Col xs={24} sm={24} md={10} lg={8} xl={8}>
+    <Col xs={24} sm={24} lg={8} xl={8}>
         <div className="column1">
           <div className="login-heading">
             <h1>Login</h1>
@@ -175,8 +175,8 @@ const Login = () => {
         </div>
       </Col>
       {/* column2 */}
-      <Col md={14} lg={16} xl={16} className="column2">
-        <img src={bgimg} alt="column2 img" className="vactor-img" />
+      <Col lg={16} xl={16} className="column2">
+        {/* <img src={bgimg} alt="column2 img" className="vactor-img" /> */}
       </Col>
     </Row>
   );

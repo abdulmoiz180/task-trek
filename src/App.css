@@ -1,24 +1,22 @@
 @import 'index.css';
 
 .App {
-  display: flex;
-  /* align-items: center;
-  justify-content: center; */
-  /* height: 100vh; */
-  /* background: var(--secondary-bg-clr); */
-  flex-direction: column;
+    /* overflow-y: hidden; */
+    display: flex;
+    /* height: 100vh; */
+    flex-direction: column;
 }
-.boxStyle{
+/* .boxStyle{
     background-color: white;
     width: 100%;
-    height: 100%;
-    margin-left: 2px;
-}
+    min-height: 100%;
+} */
 
 .column1{
-    padding-left: 10px;
-    margin: 57px 27px 0px;
+    /* padding-left: 10px; */
+    margin: 52px 27px 0px;
     background-color: white;
+    height: 92vh;
 }
 h1{
     color: var(--primary-font-clr);
@@ -47,7 +45,7 @@ p{
 }
 
 .login-heading h1{
-    margin-top: 2rem;
+    /* margin-top: 2rem; */
     font-size: 3.375rem;
     font-weight: 700;
     line-height: 4.25rem;
@@ -139,23 +137,29 @@ p{
 
 .column2{
     background-color: #F9FAFF;
-    /* background-image: url('./Components/bg/Layer.png'); */
+    background-image: url(../src/assets/images/Layer\ 11.png);
+    background-size: 909px 804px;
+    background-repeat: no-repeat;
+    /* background-position-x: right;
+    background-position-y: bottom; */
 }
-
 .vactor-img{
-    /* min-width: 68vw;
-    min-height: 70vw; */
+    
+    /* top: 1%; */
+   /* bottom: 10%; */
+    /* min-width: 100vw; */
+    /* max-height: 100vh; */
      width: 100%;
-     height: 100%;
+     height: 100%; 
 }
 .footer-area{
     display: flex;
     flex-direction: column;
-    margin-top: 16rem;
+    margin-top: 8rem;
     margin-bottom: 1rem;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 991px) {
     .column2{
         display: none !important;
     }
@@ -173,7 +177,7 @@ p{
 
     }
     .footer-area{
-        margin-top: 5rem;
+        margin-top: 8rem;
     }
 }
 
@@ -186,6 +190,10 @@ p{
         width: 70% !important;
         margin-left: 3.5rem !important;
         justify-content: center;
+    }
+    .footer-area{
+        margin-top: 7rem;
+
     }
 }
 
