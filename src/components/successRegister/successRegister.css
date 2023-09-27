@@ -1,0 +1,138 @@
+@import url(../../index.css);
+.container {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  height: 100vh;
+  align-items: center;
+}
+
+.background {
+  background-repeat: no-repeat;
+  height: 100vh;
+  background-position-y: bottom;
+  background-size: 550px 800px;
+}
+
+.col1 {
+  background-image: url(../../assets/images/Layer\ 6.png);
+  background-position-x: left;
+  background-repeat: no-repeat;
+}
+.col2 {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  align-content: center;
+  flex-wrap: wrap;
+}
+.col3 {
+  background-image: url(../../assets/images/Layer\ 7-1.png);
+  background-position-x: right;
+}
+.title {
+  color: var(--primary-font-clr) !important;
+  font-size: var(--heading-fs) !important;
+  font-weight: 700 !important;
+  line-height: 68px !important;
+}
+.typography {
+  text-align: center;
+  font-style: normal;
+}
+.subtitle {
+  color: var(--secondary-font-clr) !important;
+  font-size: 14px !important;
+  font-weight: 400 !important;
+  line-height: 28px !important;
+  letter-spacing: 0.25px !important;
+  width: 480px;
+  height: 148px;
+}
+.progress {
+  color: var(--primary-clr) !important;
+}
+.btn {
+  background: var(--primary-clr);
+  width: 87.72px;
+  border-radius: 0;
+  height: 40px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.25px;
+  margin-top: 35px;
+}
+.btn:hover {
+  background: #fff !important;
+  color: var(--primary-clr) !important;
+  border: 1px solid var(--primary-clr);
+}
+
+/* Responsiveness */
+
+@media only screen and (max-width: 600px) {
+  .col1,
+  .col3 {
+    display: none;
+  }
+  .subtitle {
+    width: 300px;
+    font-size: 12px !important;
+  }
+  .container {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media only screen and (min-width: 600px) {
+  .col1,
+  .col3 {
+    display: none;
+  }
+  .subtitle {
+    font-size: 12px !important;
+  }
+  .container {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media only screen and (min-width: 768px) {
+  .col1,
+  .col3 {
+    display: none;
+  }
+  .subtitle {
+    font-size: 14px !important;
+  }
+  .container {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+@media only screen and (min-width: 1200px) {
+  .col1,
+  .col3 {
+    display: block;
+  }
+  .container {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+  .background {
+    background-size: 350px 500px;
+  }
+}
+
+@media only screen and (min-width: 1400px) {
+  .col1,
+  .col3 {
+    display: block;
+  }
+  .container {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+  .background {
+    background-size: 550px 800px;
+  }
+}
