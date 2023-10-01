@@ -1,5 +1,6 @@
+
 import React from 'react';
-import { Input, Space, Badge, Avatar, Dropdown, Menu, Typography } from 'antd';
+import { Input, Space, Badge, Avatar, Dropdown, Menu } from 'antd';
 import {
   SearchOutlined,
   BellOutlined,
@@ -9,10 +10,13 @@ import {
   LogoutOutlined,
 } from '@ant-design/icons';
 
+import { useSearch } from '../contexts/SearchContext'; // Import the useSearch hook
+
 import headerStyles from '../styles/headerStyles.js';
 
-
 const MenuBar = ({ currentPage }) => {
+  const { searchQuery, setSearch } = useSearch(); // Access the searchQuery and setSearch from the context
+
   const menu = (
     <Menu>
       <Menu.Item key="settings" icon={<SettingOutlined />}>
@@ -27,6 +31,11 @@ const MenuBar = ({ currentPage }) => {
     </Menu>
   );
 
+  const handleSearchChange = (e) => {
+    const query = e.target.value;
+    setSearch(query);
+  };
+
   return (
     <div style={headerStyles.container}>
       <div style={headerStyles.leftSection}>
@@ -39,6 +48,8 @@ const MenuBar = ({ currentPage }) => {
             prefix={<SearchOutlined />}
             placeholder="Search..."
             style={headerStyles.searchInput}
+            value={searchQuery}
+            onChange={handleSearchChange}
           />
         </Space>
       </div>
