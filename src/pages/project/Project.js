@@ -121,7 +121,7 @@ const Project = () => {
 
 
   const cardRender = (project) => {
-    const { title, start_Date, status, members, progress } = editingProjectId || project;
+    const { title, start_Date, status, members, progress } = project;
 
 let statusImg= redDotSvg;
 let statusColor = 'red';
