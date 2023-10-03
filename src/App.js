@@ -1,6 +1,10 @@
 import React from 'react'
 import './App.css'
 import Routers from './Routers/Routers';
+// import SearchProvider from './contexts/SearchContext'
+import AppHeader from './layout/MenuBar'
+import { SearchProvider } from './contexts/SearchContext';
+
 
 
 const App = () => {
@@ -11,8 +15,10 @@ const App = () => {
 // }, [])
 
   return (
+
    
     <SearchProvider>
+   
       {/* <MenuBar/>
        */}
        <AppHeader/>

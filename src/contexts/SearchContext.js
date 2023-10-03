@@ -1,3 +1,5 @@
+
+
 import React, { createContext, useContext, useState } from 'react';
 
 const SearchContext = createContext();
@@ -6,6 +8,7 @@ const MenuContext = createContext();
 export const useSearch = () => useContext(SearchContext);
 export const useMenuContext = ()=> useContext(MenuContext);
 
+// export const SearchProvider = ({ children }) => {
 export const SearchProvider = (props) => {
   const [searchQuery, setSearchQuery] = useState('');
   const[menuFilter , setMenuFilter] = useState('All');

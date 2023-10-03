@@ -2,6 +2,7 @@ import { Card } from 'antd';
 import EditSvg from '../assets/images/edit-pencil 1.svg';
 import MoreSvg from '../assets/images/more.svg';
 import dotSvg from '../assets/images/Ellipse 12.svg';
+import { useSearch , useMenuContext } from '../contexts/SearchContext';
 
 
 
@@ -14,7 +15,13 @@ const Project = () => {
         {title: "Module Page", status:"Inactive", start_Date: "28-08-2023", members: "Anum", progress: "0%" },
     ]
 
+    const { searchQuery } = useSearch(); // Access the searchQuery from the context
+      const { menuFilter } = useMenuContext();
+
 const cardRender =(card, index) => {
+    const filteredBySearch = !searchQuery || card.title.toLowerCase().includes(searchQuery.toLowerCase());
+  const filteredByMenu = menuFilter ==='All' ||  card.status === menuFilter;
+  if (filteredBySearch && filteredByMenu)
     return(
         <div className="card-render" >
             <Card>
@@ -54,3 +61,7 @@ const cardRender =(card, index) => {
     );
 }
 export default Project;
+
+
+
+
