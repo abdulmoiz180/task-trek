@@ -39,6 +39,27 @@ const headerStyles = {
     avatar: {
       cursor: 'pointer',
     },
+    AdditonalMenuStyle: {
+      display: 'flex',
+    },
+    AdditonalMenuStyleMain:{
+      width:'80%', 
+      border: '1px solid #F1F2F7',
+      marginTop: '10px'
+    },
+  
+    ButtonStyle: {
+      backgroundColor: '#00DB99',
+      padding: '10px 40px 35px 20px',
+      borderRadius: '26px',
+      marginTop: '10px',
+    },
+    AdditonalMenuStyleButton:{
+      width:'20%'
+    },
+    AdditonalMenuStyleRow:{
+      display:'flex'
+    }
   };
   
   export default headerStyles;

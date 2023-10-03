@@ -1,5 +1,6 @@
+
 import React from 'react';
-import { Input, Space, Badge, Avatar, Dropdown, Menu, Typography } from 'antd';
+import { Input, Space, Badge, Avatar, Dropdown, Menu } from 'antd';
 import {
   SearchOutlined,
   BellOutlined,
@@ -7,12 +8,19 @@ import {
   SettingOutlined,
   UserOutlined,
   LogoutOutlined,
+  PlusOutlined,
 } from '@ant-design/icons';
+import { Button } from 'antd'
+
+import { useMenuContext, useSearch } from '../contexts/SearchContext'; // Import the useSearch hook
 
 import headerStyles from '../styles/headerStyles.js';
-
+ 
 
 const MenuBar = ({ currentPage }) => {
+  const { searchQuery, setSearch } = useSearch(); // Access the searchQuery and setSearch from the context
+  
+
   const menu = (
     <Menu>
       <Menu.Item key="settings" icon={<SettingOutlined />}>
@@ -27,6 +35,11 @@ const MenuBar = ({ currentPage }) => {
     </Menu>
   );
 
+  const handleSearchChange = (e) => {
+    const query = e.target.value;
+    setSearch(query);
+  };
+
   return (
     <div style={headerStyles.container}>
       <div style={headerStyles.leftSection}>
@@ -39,9 +52,11 @@ const MenuBar = ({ currentPage }) => {
             prefix={<SearchOutlined />}
             placeholder="Search..."
             style={headerStyles.searchInput}
+            value={searchQuery}
+            onChange={handleSearchChange}
           />
         </Space>
-      </div> 
+      </div>
 
       <div style={headerStyles.rightSection}>
         <Space size="large">
@@ -61,4 +76,58 @@ const MenuBar = ({ currentPage }) => {
   );
 };
 
-export default MenuBar;
+const AdditionalMenu = () => {
+  // Define your additional menu content here
+  const{menuFilter , setMenuFilter } = useMenuContext();
+  // const handleStatusFilterChange = (selectedStatus) => {
+  //   setMenuFilter(selectedStatus);
+  // };
+  const handleStatusFilterChange = ({ key }) => {
+    // console.log("Selected Status:", selectedStatus);
+    setMenuFilter(key);
+  };
+  
+
+  const additionalMenuContent = (
+    <div style={headerStyles.AdditonalMenuStyleRow} >
+      <div style={headerStyles.AdditonalMenuStyleButton}>  
+      ``
+
+        <Button
+          type="primary" 
+          style={headerStyles.ButtonStyle}>
+          <PlusOutlined /> Add
+        </Button>
+      </div>
+      <div style={headerStyles.AdditonalMenuStyleMain}>
+        <Menu style={headerStyles.AdditonalMenuStyle} value={menuFilter} onClick={handleStatusFilterChange}>
+          <Menu.Item key="All">All</Menu.Item>
+          <Menu.Item key="Inactive">Inactive</Menu.Item>
+          <Menu.Item key="OnHold">On Hold</Menu.Item>
+          <Menu.Item key="Completed">Completed</Menu.Item>
+          {/* Add more menu items as needed */}
+        </Menu>
+      </div>
+      
+    </div>
+   
+  );
+
+  return (
+    <div>
+      {/* Render your additional menu content */}
+      {additionalMenuContent}
+    </div>
+  );
+};
+
+const AppHeader = ({ currentPage }) => {
+  return (
+    <div>
+      <MenuBar currentPage={currentPage} />
+      <AdditionalMenu /> {/* Render the additional menu */}
+    </div>
+  );
+};
+
+export default AppHeader;

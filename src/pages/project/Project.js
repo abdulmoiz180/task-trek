@@ -8,6 +8,7 @@ import greenDotSvg from '../../assets/images/Ellipse 12.svg';
 import yellowDotSvg from '../../assets/images/Ellipse yellow.svg';
 import Line3 from '../../assets/images/Line 3.png';
 import './project.css';
+import AppHeader from '../../layout/MenuBar';
 
 
 const Project = () => {
@@ -211,6 +212,8 @@ else if(status === 'On Hold' || status === 'Review'){
 
   return (
     <div>
+      <AppHeader/>
+
       <form onSubmit={handleSubmit}>
         <input
           type="text"
