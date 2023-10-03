@@ -6,10 +6,10 @@ import {
   KeyOutlined,
   QuestionCircleFilled,
 } from "@ant-design/icons";
-import { useState } from "react";
 import { useFormik } from "formik";
 import bgimg from "../assets/images/Layer 8.png";
 import { LoginSchema } from "../Schema/LoginSchema";
+import { useNavigate } from "react-router-dom";
 
 
 function MouseOver(event) {
@@ -39,7 +39,7 @@ const ChangePassword = () => {
 
   console.log(formik);
 
-
+const navigate = useNavigate()
   return (
     <Row className="boxStyle">
       {/* 1st column */}
@@ -157,9 +157,9 @@ const ChangePassword = () => {
               align="center"
               onMouseOver={MouseOver}
               onMouseOut={MouseOut}
-            //   onClick={() => {
-            //     navigate("/register");
-            //   }}
+              onClick={() => {
+                navigate("/register");
+              }}
             >
               Customer Support
             </Typography>

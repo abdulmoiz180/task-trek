@@ -4,9 +4,9 @@
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
-  height: 100vh;
+  height: 98vh !important;
 }
-.typogrphy {
+.reg-typography {
   line-height: 28px;
   letter-spacing: 0.25px;
   color: var(--secondary-font-clr);
@@ -25,7 +25,7 @@
   justify-content: center;
 }
 
-.link {
+.reg-link {
   color: var(--primary-clr) !important;
   text-decoration: none;
 }
@@ -90,7 +90,7 @@
   font-weight: 400;
   font-size: 12px;
 }
-.info {
+.reg-info {
   width: 300px;
   font-weight: 700;
   font-size: 14px;
@@ -148,7 +148,7 @@
   .form-container {
     width: 100%;
   }
-  .info {
+  .reg-info {
     font-weight: 500;
     font-size: 12px;
     line-height: 20px;
@@ -189,7 +189,9 @@
     width: 60%;
     padding: 0;
   }
-
+  .reg-info {
+    text-align: left;
+  }
   .field {
     width: 300px !important;
   }

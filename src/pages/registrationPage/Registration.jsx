@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import { useFormik } from "formik";
+import {createUserWithEmailAndPassword, updateProfile} from 'firebase/auth';
+import { auth  } from "../../utils/constants/Firebase";
 import { RegistrationSchema } from "../../Schema/RegistrationSchema";
 import HelpIcon from "@mui/icons-material/Help";
 import TextField from "@mui/material/TextField";
@@ -20,6 +22,9 @@ const initialValues = {
   confirmPassword: "",
 };
 const Registration = () => {
+  const navigate = useNavigate();
+  const [errMsg, setErrMsg]= useState("")
+  const [submitButtonDisabled, setSubmitButtonDisabled]= useState(false);
   const inputs = [
     {
       id: 1,
@@ -76,18 +81,44 @@ const Registration = () => {
     useFormik({
       initialValues,
       validationSchema: RegistrationSchema,
-      onSubmit: (action) => {
-        action.resetForm();
+       onSubmit: (action) => {
+       
+
+
+
+        // action.resetForm();
+        if(!values.firstName || !values.email || !values.password){
+          setErrMsg("Fill all Fields");
+          return;
+        }
+        setErrMsg("");
+        setSubmitButtonDisabled(true)
+        createUserWithEmailAndPassword(auth, values.email, values.password)
+        .then(async (res) => {
+          setSubmitButtonDisabled(false);
+          const user= res.user;
+          console.log(user);
+          await updateProfile(user, {
+            displayName: values.firstName,
+          });
+          navigate("/dashboard")
+          console.log(res);
+        })
+        .catch((err) => {
+          setSubmitButtonDisabled(false);
+          setErrMsg(err.message);
+          console.log(err)
+        })
       },
     });
-  const navigate = useNavigate();
+
 
   return (
     <>
       <section className="register-container">
         <div className="form-container">
-          <div className="head typography link">
-            <Link to="/login" className="link">
+          <div className="head reg-typography reg-link">
+            <Link to="/" className="reg-link">
               Already a member?
             </Link>
             <PersonIcon />
@@ -96,10 +127,10 @@ const Registration = () => {
           <form onSubmit={handleSubmit} className="registration-form">
             <div className="heading">
               <h1 className="main-heading">Input your information</h1>
-              <p className="info typography">
+              <p className="reg-info reg-typography">
                 We need you to help us with some basic information for your
                 account creation. Here are our
-                <span className="link"> terms and conditins</span>. Please read
+                <span className="reg-link"> terms and conditins</span>. Please read
                 them carefully. We are GDRP compliant
               </p>
             </div>
@@ -109,7 +140,7 @@ const Registration = () => {
             <div className="field-container">
               {inputs.map((input) => (
                 <div key={input.id}>
-                  <div className="label typography">
+                  <div className="label reg-typography">
                     <label htmlFor={input.htmlFor}>{input.label}</label>
                     <HelpIcon className="icon" />
                   </div>
@@ -128,7 +159,7 @@ const Registration = () => {
                     />
                   </div>
                   {errors[input.name] && touched[input.name] ? (
-                    <p className="error-message typography">
+                    <p className="error-message reg-typography">
                       {errors[input.name]}
                     </p>
                   ) : null}
@@ -138,20 +169,21 @@ const Registration = () => {
             <div className="dotted-line">
               <img src={Divider} alt="" />
             </div>
+            <div className="flex">
+              <p className="error-message">{errMsg}</p>
+            </div>
             <div>
               <div className="flex ">
-                <p className="typography terms">
+                <p className="reg-typography terms">
                   <Checkbox />I agree with
-                  <span className="link"> terms and conditins.</span>
+                  <span className="reg-link"> terms and conditins.</span>
                 </p>
                 <Button
                   type="submit"
+                  disabled={submitButtonDisabled}
                   variant="contained"
                   className="button"
                   sx={{ mt: 3, mb: 2 }}
-                  onClick={() => {
-                    navigate("/dashboard");
-                  }}
                 >
                   Register
                 </Button>
