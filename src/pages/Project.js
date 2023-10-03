@@ -228,7 +228,7 @@ const Project = () => {
             </Link>
             <Modal
               title="Add Task"
-              visible={taskModalVisible}
+              open={taskModalVisible}
               onOk={handleTaskAdd}
               onCancel={toggleTaskModal}
             >
