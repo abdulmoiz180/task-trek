@@ -3,7 +3,8 @@
     display: grid;
     grid-template-columns: repeat(3, 0fr);
     /* padding: 20px; */
-    grid-gap: 5px;
+    row-gap: 42px;
+   
   }
   .card-render {
     padding: 9px;

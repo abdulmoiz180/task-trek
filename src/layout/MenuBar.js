@@ -12,20 +12,18 @@ import {
 } from '@ant-design/icons';
 import { Button } from 'antd'
 
+// import { useSearch } from '../contexts/SearchContext'; // Import the useSearch hook
 import { useMenuContext, useSearch } from '../contexts/SearchContext'; // Import the useSearch hook
 
 import headerStyles from '../styles/headerStyles.js';
- 
+
 
 const MenuBar = ({ currentPage }) => {
   const { searchQuery, setSearch } = useSearch(); // Access the searchQuery and setSearch from the context
-  
+
 
   const menu = (
     <Menu>
-      <Menu.Item key="settings" icon={<SettingOutlined />}>
-        Settings
-      </Menu.Item>
       <Menu.Item key="profile" icon={<UserOutlined />}>
         Profile
       </Menu.Item>
@@ -34,18 +32,15 @@ const MenuBar = ({ currentPage }) => {
       </Menu.Item>
     </Menu>
   );
-
   const handleSearchChange = (e) => {
     const query = e.target.value;
     setSearch(query);
   };
-
   return (
     <div style={headerStyles.container}>
       <div style={headerStyles.leftSection}>
         <h1 style={headerStyles.pageTitle}>{currentPage}</h1>
       </div>
-
       <div style={headerStyles.centerSection}>
         <Space>
           <Input
@@ -57,15 +52,12 @@ const MenuBar = ({ currentPage }) => {
           />
         </Space>
       </div>
-
       <div style={headerStyles.rightSection}>
         <Space size="large">
           <MessageOutlined style={headerStyles.icon} />
-
           <Badge dot>
             <BellOutlined style={headerStyles.icon} />
           </Badge>
-
           <SettingOutlined style={headerStyles.icon} />
           <Dropdown overlay={menu} trigger={['click']}>
             <Avatar icon={<UserOutlined />} style={headerStyles.avatar} />
@@ -76,6 +68,7 @@ const MenuBar = ({ currentPage }) => {
   );
 };
 
+// export default MenuBar;
 const AdditionalMenu = () => {
   // Define your additional menu content here
   const{menuFilter , setMenuFilter } = useMenuContext();
@@ -86,13 +79,11 @@ const AdditionalMenu = () => {
     // console.log("Selected Status:", selectedStatus);
     setMenuFilter(key);
   };
-  
+
 
   const additionalMenuContent = (
     <div style={headerStyles.AdditonalMenuStyleRow} >
-      <div style={headerStyles.AdditonalMenuStyleButton}>  
-      ``
-
+      <div style={headerStyles.AdditonalMenuStyleButton}>   
         <Button
           type="primary" 
           style={headerStyles.ButtonStyle}>
@@ -108,9 +99,9 @@ const AdditionalMenu = () => {
           {/* Add more menu items as needed */}
         </Menu>
       </div>
-      
+
     </div>
-   
+
   );
 
   return (

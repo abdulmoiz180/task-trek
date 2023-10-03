@@ -10,6 +10,8 @@ import Line3 from '../../assets/images/Line 3.png';
 import './project.css';
 import AppHeader from '../../layout/MenuBar';
 import { Link } from 'react-router-dom';
+import { useSearch , useMenuContext } from '../../contexts/SearchContext';
+
 
 const Project = () => {
   const [projects, setProjects] = useState([]);
@@ -61,7 +63,7 @@ const Project = () => {
 
 
 
-  const handleSubmit = async (e) => {
+ const handleSubmit = async (e) => {
     e.preventDefault();
     await createProject({ ...newProject, tasks: taskList });
     setNewProject({
@@ -118,6 +120,9 @@ const Project = () => {
     setProjects(updatedProjects);
   };
 
+  
+  const { searchQuery } = useSearch(); // Access the searchQuery from the context
+  const { menuFilter } = useMenuContext();
 
 
   const cardRender = (project) => {
@@ -143,6 +148,10 @@ else if(status === 'On Hold' || status === 'Review'){
       color = 'green';
     }
 
+
+    const filteredBySearch = !searchQuery || project.title.toLowerCase().includes(searchQuery.toLowerCase());
+    const filteredByMenu = menuFilter ==='All' ||  project.status === menuFilter;
+    if (filteredBySearch && filteredByMenu)
     return (
       <div className="card-render" key={project.id}>
         <Card>
