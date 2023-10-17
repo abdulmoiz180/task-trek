@@ -43,8 +43,6 @@ const Sidebar = () => {
     console.log('click ', e);
   };
   return (<>
-
-
     <div className='side-bar'>
       <div className='logo-container'>
         <img src={logo} alt='logo' className='logo' />
@@ -69,10 +67,6 @@ const Sidebar = () => {
       </Button>
 
     </div>
-    {/* <div className='dashboard-main-section'>
-      <Outlet />
-    </div> */}
-  </>
   );
 };
 

@@ -1,5 +1,3 @@
-// Routers.js
-
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Registration from '../pages/registrationPage/Registration';
@@ -14,6 +12,8 @@ import NotFound from '../components/NotFound';
 import Dashboard from '../pages/dashboard';
 import Project from '../pages/project/Project';
 import LayoutSideBar from '../layout/LayoutSideBar';
+import Member from '../pages/member/Member';
+
 
 const Routers = () => {
   return (
@@ -31,6 +31,8 @@ const Routers = () => {
           <Route path="/success-email" element={<SuccessEmail />} />
           <Route path="/success-register" element={<SuccessRegister />} />
           <Route path="*" element={<NotFound />} />
+          <Route path="/members" element={<Member />} />
+
         </Routes>
       </Router>
     </div>
