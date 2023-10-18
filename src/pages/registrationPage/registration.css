@@ -29,6 +29,10 @@
   color: var(--primary-clr) !important;
   text-decoration: none;
 }
+
+.LinkCls{
+  text-decoration: none;
+}
 .terms {
   font-weight: 700;
   font-size: 14px;

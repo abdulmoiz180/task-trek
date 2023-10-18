@@ -165,7 +165,7 @@ return (
             <p className="reg-info reg-typography">
               We need you to help us with some basic information for your
               account creation. Here are our
-              <span className="reg-link"> <Link to="/term-condition">terms and conditions</Link></span>. Please read
+              <span className="reg-link"> <Link className="LinkCls" to="/term-condition">terms and conditions</Link></span>. Please read
               them carefully. We are GDPR compliant
             </p>
           </div>
@@ -217,7 +217,7 @@ return (
                   onChange={handleCheckboxChange}
                 />
                 I agree with
-                <span className="reg-link"> <Link to="/term-condition">terms and conditions</Link> </span>
+                <span className="reg-link"> <Link className="LinkCls" to="/term-condition">terms and conditions</Link> </span>
               </p>
               <Button
                 type="submit"
