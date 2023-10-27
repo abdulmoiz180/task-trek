@@ -1,8 +1,6 @@
 .mainDiv{
     width: 100%;
 
-    text-align: center;
-    
     background-color: #f7f3f3;
     border-radius: 10px;
     box-shadow: 1px 2px 6px hsla(98,4%,61%,.2);
@@ -16,8 +14,12 @@
     padding: 20px 0px;
 }
 .HeaderCls{
-    padding: 40px 0px 20px 0px;
+    padding: 40px 0px 20px 20px;
 }
 .HeaderCls2{
-    padding: 0px 0px 20px 0px;
+    padding: 0px 0px 20px 20px;
+}
+.mainDiv ul{
+    padding: 0px 0px 20px 20px;
+    list-style-type: none;
 }

@@ -1,6 +1,6 @@
 import "./project.css";
 import headerStyles from '../../styles/headerStyles';
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Card, Progress, Button, Input, Modal, List, Menu, Popover } from "antd";
 import { PlusOutlined, DeleteOutlined } from "@ant-design/icons";
 import EditSvg from "../../assets/images/edit-pencil 1.svg";
@@ -13,15 +13,18 @@ import {
   fetchProjects,
   updateProject,
   deleteProject,
+  fetchTasksForProject,
 } from "../../services/api";
-import { Link } from "react-router-dom";
-import AppHeader from "../../layout/MenuBar";
+import { doc, setDoc } from 'firebase/firestore';
+import { Link, useNavigate,useParams } from "react-router-dom";
+import { db } from '../../utils/constants/Firebase';
+
 import { useSearch, useMenuContext } from "../../contexts/SearchContext";
-import { useParams } from 'react-router-dom';
-import Sidebar from "../sidebar/Sidebar";
+import TaskPage from "../taskpage/TaskPage";
 
 const Project = () => {
   const { userId } = useParams();
+  const navigate = useNavigate()
   const [projects, setProjects] = useState([]);
   const [newProject, setNewProject] = useState({
     title: '',
@@ -30,6 +33,7 @@ const Project = () => {
     members: '',
     progress: 0,
   });
+  const [tasks, setTasks] = useState([]);
   const [showInputFields, setShowInputFields] = useState(false);
   const [taskModalVisible, setTaskModalVisible] = useState(false);
   const [taskList, setTaskList] = useState([]);
@@ -39,6 +43,8 @@ const Project = () => {
   const [editingMembers, setEditingMembers] = useState(null);
   const [editingTitle, setEditingTitle] = useState('');
 
+
+  // for fetching project
   useEffect(() => {
     async function fetchProjectData() {
       const projectList = await fetchProjects(userId);
@@ -46,6 +52,7 @@ const Project = () => {
     }
     fetchProjectData();
   }, [userId]);
+
 
 
   const handleInputChange = (e) => {
@@ -72,15 +79,10 @@ const Project = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await createProject({ ...newProject, tasks: taskList });
-    setNewProject({
-      title: "",
-      StartDate: "",
-      status: "In Progress",
-      members: "",
-      progress: 0,
-    });
-    setTaskList([]);
+    // useRef
+    // const docRef = doc(db, "projects", docId.current.value);
+    // await setDoc(docRef, { docId: docId.current.value });
+
     const updatedProjectList = await fetchProjects();
     setProjects(updatedProjectList);
     setShowInputFields(true);
@@ -106,6 +108,7 @@ const Project = () => {
   };
 
   const handleDelete = async (projectId) => {
+    // console.log(projectId)
     await deleteProject(projectId);
     const updatedProjectList = await fetchProjects();
     setProjects(updatedProjectList);
@@ -162,7 +165,7 @@ const Project = () => {
   const { searchQuery } = useSearch(); // Access the searchQuery from the context
   const { menuFilter, setMenuFilter } = useMenuContext();
 
-
+  // create project input content
   const content = (
     <div>
 
@@ -187,6 +190,7 @@ const Project = () => {
 
   )
 
+  //--------------------------card Render function--------------------------------------
   const cardRender = (project) => {
     const { title, status, members, progress } = project;
 
@@ -239,7 +243,7 @@ const Project = () => {
                       onClick={() => handleEdit(project.id)}
                     >
                       <span>
-                        <img src={EditSvg} alt="edit icon" />{" "}
+                        <img src={EditSvg} alt="edit icon" />
                       </span>
                     </Button>
                     <Button
@@ -257,7 +261,7 @@ const Project = () => {
             </div>
             <div className="status">
               <span>
-                <img src={statusImg} alt="dot" />{" "}
+                <img src={statusImg} alt="dot" />
               </span>
               {editingProjectId === project.id ? (
                 <select
@@ -299,9 +303,9 @@ const Project = () => {
               {/* tasks box */}
               <div className="tasks-box">
                 <div className="tasks">
-                  <p style={{ marginLeft: "8px" }}>{project.tasks.length}</p>
-                  {project.tasks && project.tasks.length > 0 && (
-                    <div className="task-list">
+                  <p style={{ marginLeft: "8px" }}>{tasks.length}</p>
+                  {tasks && tasks.length > 0 && (
+                    <div className="task-list" key={project.id}>
                       <List
                         dataSource={project.tasks}
                         renderItem={(task, index) => (
@@ -319,8 +323,8 @@ const Project = () => {
                     </div>
                   )}
                   <div className="task-input">
-                    <Link to="/tasks">
-                      <p>Tasks</p>
+                    <Link to={`/${project.id}/tasks`}>
+                      <p >Tasks</p>
                     </Link>
                     <Modal
                       title="Add Task"
@@ -387,7 +391,7 @@ const Project = () => {
   return (
     <div>
 
-
+      {/*------------------------ Navbar filteration -----------------------------------*/}
       <div className="navbar">
         <div className="new-project">
           <Popover placement="bottom" content={content}>
@@ -408,11 +412,16 @@ const Project = () => {
         </div>
 
       </div>
+      {/* ----------------------------card render-------------------------------- */}
       <div className="card">
         {projects.map((project) => (
-          <div key={project.id}>{cardRender(project)}</div>
+          <>
+            <div key={project.id}>{cardRender(project)}</div>
+          </>
         ))}
+
       </div>
+
     </div>
   );
 };

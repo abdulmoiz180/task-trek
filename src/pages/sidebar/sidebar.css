@@ -1,21 +1,20 @@
-.layout-container {
-  height: 100vh;
+.logo-container{
+  border-bottom: 1px solid #f1f1f1;
 }
 .logo {
   width: 100px;
   height: 100px;
 }
-.sider-shapatar {
-  background: #fff !important;
-}
-
-.sidebar-btn {
-  width: 60% !important;
-}
-.flex-control {
-  height: 80vh;
+.side-bar {
+  height: 100vh;
+  width: 257px;
+  border-right: 1px solid #f1f1f1;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
+}
+.sidebar-btn{
+  margin-top: 300px;
+  width: 65%;
+  height: 50px;
+  margin: auto;
 }

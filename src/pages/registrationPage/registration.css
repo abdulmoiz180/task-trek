@@ -4,12 +4,15 @@
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
-  height: 98vh !important;
+  height: 95vh !important;
 }
 .reg-typography {
   line-height: 28px;
   letter-spacing: 0.25px;
   color: var(--secondary-font-clr);
+}
+.TextFieldCls .MuiInputBase-root {
+  border-radius: 0px;
 }
 .field-container {
   display: grid;
@@ -28,6 +31,7 @@
 .reg-link {
   color: var(--primary-clr) !important;
   text-decoration: none;
+  cursor: pointer;
 }
 
 .LinkCls{

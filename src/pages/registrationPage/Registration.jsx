@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useFormik } from "formik";
-
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { db } from '../../utils/constants/Firebase'; 
 import { v4 as uuidv4 } from 'uuid';
@@ -21,6 +20,8 @@ import "./registration.css";
 import { Checkbox } from "@mui/material";
 import PersonIcon from "@mui/icons-material/Person";
 import Divider from "../../assets/images/Line 4.png";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
 const initialValues = {
   firstName: "",
@@ -38,6 +39,13 @@ const Registration = () => {
   const [errMsg, setErrMsg] = useState("");
   const [submitButtonDisabled, setSubmitButtonDisabled] = useState(false);
   const [agreeTerms, setAgreeTerms] = useState(false);
+  const [showPassword, setShowPassword] = useState(false); 
+
+  const isStrongPassword = (password) => {
+    return (
+      password.length >= 8 && /[!@#$%^&*]/.test(password) && /\d/.test(password)
+    );
+  };
 
   const handleCheckboxChange = (event) => {
     setAgreeTerms(event.target.checked);
@@ -83,15 +91,15 @@ const Registration = () => {
       id: 5,
       htmlFor: "password",
       name: "password",
-      type: "password",
+      type: showPassword ? "text" : "password", 
       placeholder: "Password",
       label: "Password"
     },
     {
       id: 6,
-      htmlFor: "confirm_Password",
+      htmlFor: "confirmPassword",
       name: "confirmPassword",
-      type: "password",
+      type: showPassword ? "text" : "password",
       placeholder: "Confirm Password",
       label: "Confirm Password"
     }
@@ -103,6 +111,10 @@ const Registration = () => {
     onSubmit: async () => {
       if (!values.firstName || !values.email || !values.password) {
         setErrMsg('Fill all Fields');
+        return;
+      }
+      if (!isStrongPassword(values.password)) {
+        setErrMsg('Password is not strong enough. It must contain at least 8 characters, special characters, and numbers.');
         return;
       }
       
@@ -134,7 +146,7 @@ const Registration = () => {
         const userId = await getUserIdByEmail(values.email);
 
         if (userId) {
-          navigate(`/dashboard/${userId}`);
+          navigate(`/dashboard/project/:${userId}`);
         } else {
           setErrMsg("User not found.");
         }
@@ -148,39 +160,38 @@ const Registration = () => {
     },
   });
 
-return (
-  <>
-    <section className="register-container">
-      <div className="form-container">
-        <div className="head reg-typography reg-link">
-          <Link to="/" className="reg-link">
-            Already a member?
-          </Link>
-          <PersonIcon />
-        </div>
+  return (
+    <>
+      <section className="register-container">
+        <div className="form-container">
+          <div className="head reg-typography reg-link">
+            <Link to="/" className="reg-link">
+              Already a member?
+            </Link>
+            <PersonIcon />
+          </div>
 
-        <form onSubmit={handleSubmit} className="registration-form">
-          <div className="heading">
-            <h1 className="main-heading">Input your information</h1>
-            <p className="reg-info reg-typography">
-              We need you to help us with some basic information for your
-              account creation. Here are our
-              <span className="reg-link"> <Link className="LinkCls" to="/term-condition">terms and conditions</Link></span>. Please read
-              them carefully. We are GDPR compliant
-            </p>
-          </div>
-          <div className="dotted-line">
-            <img src={Divider} alt="" />
-          </div>
-          <div className="field-container">
-            {inputs.map((input) => (
-              <div key={input.id}>
-                <div className="label reg-typography">
-                  <label htmlFor={input.htmlFor}>{input.label}</label>
-                  <HelpIcon className="icon" />
-  
+          <form onSubmit={handleSubmit} className="registration-form">
+            <div className="heading">
+              <h1 className="main-heading">Input your information</h1>
+              <p className="reg-info reg-typography">
+                We need you to help us with some basic information for your
+                account creation. Here are our
+                <span className="reg-link"  onClick={() => {navigate("/term-condition");}}> terms and conditions</span>. 
+                Please read them carefully. We are GDPR compliant
+              </p>
+            </div>
+            <div className="dotted-line">
+              <img src={Divider} alt="" />
+            </div>
+            <div className="field-container">
+              {inputs.map((input) => (
+                <div key={input.id}>
+                  <div className="label reg-typography">
+                    <label htmlFor={input.htmlFor}>{input.label}</label>
+                    <HelpIcon className="icon" />
                   </div>
-                  <div>
+                  <div className="TextFieldCls">
                     <TextField
                       className="field"
                       sx={{ width: "35ch" }}
@@ -193,49 +204,64 @@ return (
                       onChange={handleChange}
                       onBlur={handleBlur}
                     />
+                    {input.name === 'password' || input.name === 'confirmPassword' && (
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="toggle-password-button"
+                      >
+                        {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                      </button>
+                    )}
                   </div>
+                  {input.name === 'password' && isStrongPassword(values.password) && (
+                    <p className="strength-message reg-typography">Password is strong!</p>
+                  )}
                   {errors[input.name] && touched[input.name] ? (
                     <p className="error-message reg-typography">
                       {errors[input.name]}
                     </p>
                   ) : null}
-                
-              </div>
-            ))}
-          </div>
-          <div className="dotted-line">
-            <img src={Divider} alt="" />
-          </div>
-          <div className="flex">
-            <p className="error-message">{errMsg}</p>
-          </div>
-          <div>
-            <div className="flex">
-              <p className="reg-typography terms">
-                <Checkbox
-                  checked={agreeTerms}
-                  onChange={handleCheckboxChange}
-                />
-                I agree with
-                <span className="reg-link"> <Link className="LinkCls" to="/term-condition">terms and conditions</Link> </span>
-              </p>
-              <Button
-                type="submit"
-                disabled={submitButtonDisabled || !agreeTerms}
-                variant="contained"
-                className="button"
-                sx={{ mt: 3, mb: 2 }}
-              >
-                Register
-              </Button>
+                </div>
+              ))}
             </div>
-          </div>
-        </form>
-      </div>
-      <div className="side"></div>
-    </section>
-  </>
-);
+            <div className="dotted-line">
+              <img src={Divider} alt="" />
+            </div>
+            <div className="flex">
+              <p className="error-message">{errMsg}</p>
+            </div>
+            <div>
+              <div className="flex">
+                <p className="reg-typography terms">
+                  <Checkbox
+                    checked={agreeTerms}
+                    onChange={handleCheckboxChange}
+                  />
+                  I agree with
+                  <span className="reg-link"
+                     onClick={() => {
+                      navigate("/term-condition");
+                    }}
+                  > terms and conditions.</span>
+                </p>
+                <Button
+                  type="submit"
+                  disabled={submitButtonDisabled || !agreeTerms}
+                  variant="contained"
+                  className="button"
+                  sx={{ mt: 3, mb: 2 ,color:'white !important' }}
+                >
+                  Register
+                </Button>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div className="side"></div>
+      </section>
+    </>
+  );
 };
 
 export default Registration;

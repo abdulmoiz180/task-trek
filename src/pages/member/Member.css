@@ -1,0 +1,52 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap");
+.custom-avatar {
+  background-color: #125bc1;
+  vertical-align: middle;
+  margin-right: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+.members-container {
+  width: 80% !important;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.members-name {
+  text-transform: capitalize;
+  font-family: "Poppins", sans-serif !important;
+}
+.list-item {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  transition: background-color 0.3s;
+}
+
+.list-item:hover {
+  background-color: #e6e6e6;
+}
+.members-card {
+  background-color: #f9faff !important;
+}
+.user-details {
+  margin-left: 10px;
+}
+.ant-list-split .ant-list-item {
+  border-block-end: none !important;
+}
+.members-search {
+  width: 400px !important;
+}
+.ant-input-group .ant-input {
+  width: 100%;
+  margin-bottom: 0;
+  height: 50px;
+  text-align: inherit;
+  font-family: "Poppins", sans-serif !important;
+  font-size: 16px !important;
+}
+.ant-input-search .ant-input-search-button {
+  height: 50px !important;
+  width: 50px !important;
+}
