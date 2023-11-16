@@ -16,6 +16,7 @@ import Project from '../pages/project/Project';
 import LayoutSideBar from '../layout/LayoutSideBar';
 import TermAndCondition from '../pages/TermsAndConditons';
 import Member from '../pages/member/Member';
+import Column from '../pages/taskpage/Column';
 
 const Routers = () => {
 
@@ -38,6 +39,7 @@ const Routers = () => {
           <Route path="/success-register" element={<SuccessRegister />} />
           <Route path="/term-condition" element={<TermAndCondition />} />
           <Route path="*" element={<NotFound />} />
+          <Route path="/column" element={<LayoutSideBar currentPage="column"><Column /></LayoutSideBar>}/>
         </Routes>
 
       </Router>

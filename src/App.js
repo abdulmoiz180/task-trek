@@ -10,7 +10,7 @@ const App = () => {
       <main className='App'>
         <Routers />
       </main>
-    // </SearchProvider>
+    </SearchProvider>
   );
 }
 

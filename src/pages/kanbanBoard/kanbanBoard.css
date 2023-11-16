@@ -1,0 +1,22 @@
+.board{
+    min-width: 290px;
+}
+
+.board_heading{
+    display: flex;
+
+}
+
+.board_title{
+    flex: 0.07;
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+}
+
+.color{
+    display: flex;
+    gap: 2;
+    align-items: center;
+    color: #828fa3;
+}
