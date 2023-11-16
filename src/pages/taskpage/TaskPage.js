@@ -27,9 +27,10 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 const statusColumns = {
   'To Do': { title: 'To Do', image: redDotSvg },
   'In Progress': { title: 'In Progress', image: yellowDotSvg },
-  'On Hold': { title: 'On Hold', image: yellowDotSvg },
+  'Code InReview': { title: 'Code InReview', image: yellowDotSvg },
+  'Testing': { title: 'Testing', image: yellowDotSvg },
   'Completed': { title: 'Completed', image: greenDotSvg },
-  'Review': { title: 'Review', image: yellowDotSvg },
+  
 };
 
 const TaskPage = () => {
@@ -138,25 +139,25 @@ const TaskPage = () => {
     setEditModalVisible(true);
   };
 
-  const handleUpdateTask = async () => {
-    if (editedTaskIndex !== null) {
-      const updatedTasks = [...tasks];
-      updatedTasks[editedTaskIndex] = editedTask;
-      setTasks(updatedTasks);
+  // const handleUpdateTask = async () => {
+  //   if (editedTaskIndex !== null) {
+  //     const updatedTasks = [...tasks];
+  //     updatedTasks[editedTaskIndex] = editedTask;
+  //     setTasks(updatedTasks);
 
-      try {
-        const collectionName = dbNames.getTaskCollection(projectId);
-        const taskRef = doc(db, collectionName, editedTask.id);
-        await setDoc(taskRef, editedTask);
-      } catch (error) {
-        console.error('Error updating task:', error);
-      }
+  //     try {
+  //       const collectionName = dbNames.getTaskCollection(projectId);
+  //       const taskRef = doc(db, collectionName, editedTask.id);
+  //       await setDoc(taskRef, editedTask);
+  //     } catch (error) {
+  //       console.error('Error updating task:', error);
+  //     }
 
-      setEditModalVisible(false);
-      setEditedTask({});
-      setEditedTaskIndex(null);
-    }
-  };
+  //     setEditModalVisible(false);
+  //     setEditedTask({});
+  //     setEditedTaskIndex(null);
+  //   }
+  // };
 
   const content = (
     <div>
@@ -186,12 +187,11 @@ const TaskPage = () => {
           setNewTask({ ...newTask, status: e.target.value });
         }}
       >
+        <option value="To Do">To Do</option>
         <option value="In Progress">In Progress</option>
-        <option value="Discussing">Discussing</option>
+        <option value="Code InReview">Code InReview</option>
+        <option value="Testing">Testing</option>
         <option value="Completed">Completed</option>
-        <option value="Review">Review</option>
-        <option value="Cancelled">Cancelled</option>
-        <option value="On Hold">On Hold</option>
       </select>
       <Button onClick={handleAddTask}>Add Task</Button>
     </div>
@@ -200,9 +200,9 @@ const TaskPage = () => {
   const statusImg = {
     'To Do': redDotSvg,
     'In Progress': yellowDotSvg,
-    'On Hold': yellowDotSvg,
+    'Code InReview': yellowDotSvg,
+    'Testing': yellowDotSvg,
     'Completed': greenDotSvg,
-    'Review': yellowDotSvg,
   };
 
   const handleStatusFilterChange = (key) => {
@@ -281,19 +281,6 @@ const TaskPage = () => {
                 </Button>
               </Popover>
             </div>
-
-            <div className="filterMenu">
-              {/* <Menu
-                style={headerStyles.AdditonalMenuStyle}
-                value={menuFilter}
-                onClick={handleStatusFilterChange}
-              >
-                <Menu.Item key="All">All</Menu.Item>
-                <Menu.Item key="In Progress">In Progress</Menu.Item>
-                <Menu.Item key="On Hold">On Hold</Menu.Item>
-                <Menu.Item key="Completed">Completed</Menu.Item>
-              </Menu> */}
-            </div>
           </div>
 
           {/* Kanban Board */}
@@ -320,15 +307,15 @@ const TaskPage = () => {
                                 ref={provided.innerRef}
                                 {...provided.draggableProps}
                                 {...provided.dragHandleProps}
-                                className={`card ${status.toLowerCase()}`}
+                                className={`card ${status.toLowerCase()} taskCard`}
                               >
-                                <h2>{task.title}</h2>
-                                <p>Assigned: {task.assigned}</p>
+                                <h4>{task.title}</h4>
+                                {/* <p>Assigned: {task.assigned}</p> */}
                                 <div className="status">
                                   <img src={statusImg[task.status]} alt="dot" />
                                   <p>{task.status}</p>
                                 </div>
-                                <Button onClick={() => openEditModal(task, index)}>Edit</Button>
+                                {/* <Button onClick={() => openEditModal(task, index)}>Edit</Button> */}
                                 <Button onClick={() => handleDeleteTask(task.id)}>Delete</Button>
                               </Card>
                             )}
@@ -342,7 +329,7 @@ const TaskPage = () => {
             </div>
           </DragDropContext>
 
-          <Modal
+          {/* <Modal
             title="Edit Task"
             visible={editModalVisible}
             onOk={handleUpdateTask}
@@ -374,7 +361,7 @@ const TaskPage = () => {
                 </option>
               ))}
             </select>
-          </Modal>
+          </Modal> */}
           {loading && <Alert className="alert-message" message=" Loading..." type="success" />}
         </div>
       )}

@@ -1,5 +1,5 @@
 .card {
-  width: 85%;
+  width: 100%;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   /* padding: 20px; */
@@ -82,7 +82,7 @@
 }
 .status img {
   width: 0.5rem;
-  height: 0.5rem;
+  height: 1.5rem;
 }
 .status p {
   margin-left: 10px;
