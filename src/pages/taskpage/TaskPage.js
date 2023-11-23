@@ -4,6 +4,8 @@ import { ArrowLeftOutlined, PlusOutlined } from '@ant-design/icons';
 import { useSearch, useMenuContext } from '../../contexts/SearchContext';
 import headerStyles from '../../styles/headerStyles';
 import './taskPage.css';
+import { onSnapshot } from 'firebase/firestore';
+
 import ContentLoader from '../contentLoader/ContentLoader';
 import redDotSvg from '../../assets/images/Ellipse red.svg';
 import greenDotSvg from '../../assets/images/Ellipse 12.svg';
@@ -74,14 +76,39 @@ const TaskPage = () => {
     }, 2000);
   }, []);
 
+  // useEffect(() => {
+  //   const fetchTasksData = async () => {
+  //     const taskList = await fetchTasks(projectId);
+  //     setTasks(taskList);
+  //     setLoading(false);
+  //   };
+
+  //   fetchTasksData();
+  // }, [projectId]);
   useEffect(() => {
     const fetchTasksData = async () => {
       const taskList = await fetchTasks(projectId);
       setTasks(taskList);
       setLoading(false);
     };
-
+  
+    const unsubscribe = onSnapshot(
+      query(collection(db, dbNames.getTaskCollection(projectId))),
+      (snapshot) => {
+        const updatedTasks = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setTasks(updatedTasks);
+      },
+      (error) => {
+        console.error('Error fetching tasks:', error);
+      }
+    );
+  
     fetchTasksData();
+  
+    return () => unsubscribe();
   }, [projectId]);
 
   const q = collection(db, dbNames.projectCollection);
@@ -214,47 +241,83 @@ const TaskPage = () => {
 
   const { menuFilter, setMenuFilter } = useMenuContext();
 
+  // const onDragEnd = async (result) => {
+  //   if (!result.destination) {
+  //     return;
+  //   }
+
+  //   const sourceStatus = result.source.droppableId;
+  //   const destinationStatus = result.destination.droppableId;
+  //   const taskId = result.draggableId;
+
+  //   if (sourceStatus !== destinationStatus) {
+      
+  //     const updatedTasks = tasks.map((task) => {
+  //       if (task.id === taskId) {
+  //         return { ...task, status: destinationStatus };
+  //       }
+  //       return task;
+  //     });
+
+  //     setTasks(updatedTasks);
+
+  //     if (result.source.index !== result.destination.index) {
+  //       const taskToMove = updatedTasks.find((task) => task.id === taskId);
+  //       const updatedTaskData = {
+  //         ...taskToMove,
+  //         status: destinationStatus,
+  //       };
+
+  //       try {
+  //         const collectionName = dbNames.getTaskCollection(projectId);
+  //         const taskRef = doc(db, collectionName, taskId);
+  //         await setDoc(taskRef, updatedTaskData);
+  //       } catch (error) {
+  //         console.error('Error updating task in Firestore:', error);
+  //       }
+  //     }
+  //   } else {
+  //     const reorderedTasks = Array.from(tasks);
+  //     const [removed] = reorderedTasks.splice(result.source.index, 1);
+  //     reorderedTasks.splice(result.destination.index, 0, removed);
+
+  //     setTasks(reorderedTasks);
+
+  //     if (result.source.index !== result.destination.index) {
+  //       try {
+  //         const collectionName = dbNames.getTaskCollection(projectId);
+  //         const taskRef = doc(db, collectionName, taskId);
+  //         await setDoc(taskRef, { ...removed, status: sourceStatus });
+  //       } catch (error) {
+  //         console.error('Error updating task order in Firestore:', error);
+  //       }
+  //     }
+  //   }
+  // };
   const onDragEnd = async (result) => {
     if (!result.destination) {
       return;
     }
-
+  
     const sourceStatus = result.source.droppableId;
     const destinationStatus = result.destination.droppableId;
     const taskId = result.draggableId;
-
+  
     if (sourceStatus !== destinationStatus) {
-      const updatedTasks = tasks.map((task) => {
-        if (task.id === taskId) {
-          return { ...task, status: destinationStatus };
-        }
-        return task;
-      });
-
-      setTasks(updatedTasks);
-
-      if (result.source.index !== result.destination.index) {
-        const taskToMove = updatedTasks.find((task) => task.id === taskId);
-        const updatedTaskData = {
-          ...taskToMove,
-          status: destinationStatus,
-        };
-
-        try {
-          const collectionName = dbNames.getTaskCollection(projectId);
-          const taskRef = doc(db, collectionName, taskId);
-          await setDoc(taskRef, updatedTaskData);
-        } catch (error) {
-          console.error('Error updating task in Firestore:', error);
-        }
+      try {
+        const collectionName = dbNames.getTaskCollection(projectId);
+        const taskRef = doc(db, collectionName, taskId);
+        await setDoc(taskRef, { status: destinationStatus }, { merge: true });
+      } catch (error) {
+        console.error('Error updating task status in Firestore:', error);
       }
     } else {
       const reorderedTasks = Array.from(tasks);
       const [removed] = reorderedTasks.splice(result.source.index, 1);
       reorderedTasks.splice(result.destination.index, 0, removed);
-
+  
       setTasks(reorderedTasks);
-
+  
       if (result.source.index !== result.destination.index) {
         try {
           const collectionName = dbNames.getTaskCollection(projectId);
@@ -264,7 +327,7 @@ const TaskPage = () => {
           console.error('Error updating task order in Firestore:', error);
         }
       }
-    }
+    };
   };
 
 
