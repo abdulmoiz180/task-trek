@@ -1,14 +1,14 @@
 .card {
   width: 85%;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  /* padding: 20px; */
-  row-gap: 42px;
+  grid-template-columns: repeat(2, 1fr);
+  padding-left: 20px;
+  row-gap: 4px;
 }
 .card-render {
   padding: 9px;
   width: 26.9375rem;
-  height: 18.75rem;
+  height: 12.75rem;
   flex-shrink: 0;
 }
 
