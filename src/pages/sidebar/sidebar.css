@@ -43,3 +43,14 @@
 .side-bar.collapsed .ant-menu-item > .anticon {
   display: inline;
 }
+.ant-menu-item-selected{
+  background-color: #f9faff !important;
+  color: #4743e0 !important;
+  border-radius: 0 !important;
+}
+
+.ant-menu-item:hover{
+    border-radius: 0 !important;
+    background-color:#f9faff !important;
+    color: #4743e0 !important;
+}
