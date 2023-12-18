@@ -12,6 +12,7 @@ import {
   getDocs,
   query,
   addDoc,
+  serverTimestamp,
 } from 'firebase/firestore';
 import MenuBar from '../../layout/MenuBar';
 
@@ -48,6 +49,7 @@ const TaskPage = () => {
     title: '',
     assigned: '',
     status: 'Todo',
+    timestamp: '',
   });
 
   const [loading, setLoading] = useState(true);
@@ -99,7 +101,8 @@ const TaskPage = () => {
         title: newTask.title,
         projectId: projectId,
         status: newTask.status,
-        order: docsSet.size + 1
+        order: docsSet.size + 1,
+        timestamp: serverTimestamp(),
       };
 
       try {
@@ -318,6 +321,17 @@ const TaskPage = () => {
                               >
                                 <Title className='k-card-title'>{task.title}</Title>
                                 <div className='t-card-body'>
+                                  <div>
+                                  <p>Creation Date:
+                                  {task.timestamp instanceof Date
+                                  ? task.timestamp.toLocaleDateString()
+                                  : task.timestamp && task.timestamp.toDate instanceof Function
+                                  ? task.timestamp.toDate().toLocaleDateString()
+                                  : task.timestamp && task.timestamp.seconds
+                                  ? new Date(task.timestamp.seconds * 1000).toLocaleDateString()
+                                  : 'N/A'}</p>
+
+                                  </div>
                                   <div className={`task-status-container ${statusClr[task.status]}`}>
                                     <Text className='task-status'>{task.status}</Text>
                                   </div>
