@@ -82,7 +82,7 @@ const TaskPage = () => {
     };
 
     fetchTasksData();
-  }, [projectId]);
+  }, [projectId, tasks]);
 
   async function handleAddTask() {
     if (newTask.title.trim() !== '') {
