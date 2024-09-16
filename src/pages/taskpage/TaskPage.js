@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Card, Input, Button, Modal, Menu, Popover, Alert, FloatButton, Typography, Progress } from 'antd';
 import { ArrowLeftOutlined, DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import './taskPage.css';
+import { EditOutlined } from '@ant-design/icons';
+
 import ContentLoader from '../contentLoader/ContentLoader';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import {
@@ -37,12 +39,16 @@ const statusColumns = {
 };
 
 const TaskPage = () => {
+  const [editingTask, setEditingTask] = useState(null);
+  const [editModalVisible, setEditModalVisible] = useState(false);
+
   const { userId, projectId, projectName } = useParams();
   const navigate = useNavigate();
   const [tasks, setTasks] = useState([]);
   const docId = useRef();
   const [newTask, setNewTask] = useState({
     title: '',
+    description: '',
     assigned: '',
     status: 'Todo',
     timestamp: '',
@@ -82,7 +88,7 @@ const TaskPage = () => {
     };
 
     fetchTasksData();
-  }, [projectId]);
+  }, [projectId, tasks]);
 
   async function handleAddTask() {
     if (newTask.title.trim() !== '') {
@@ -91,6 +97,7 @@ const TaskPage = () => {
       const docsSet = await getDocs(taskRef);
       const newTaskData = {
         title: newTask.title,
+        description: newTask.description, 
         projectId: projectId,
         status: newTask.status,
         order: docsSet.size + 1,
@@ -105,6 +112,7 @@ const TaskPage = () => {
 
         setNewTask({
           title: '',
+          description: '',
           status: 'Todo',
         });
       } catch (error) {
@@ -130,8 +138,11 @@ const TaskPage = () => {
   const handleDeleteTask = (taskId) => {
     deleteTask(taskId);
   };
-
-
+  const handleEditTask = (taskId) => {
+    const taskToEdit = tasks.find((task) => task.id === taskId);
+    setEditingTask(taskToEdit);
+    setEditModalVisible(true); 
+  };
   const content = (
     <div className='pop-content-container'>
       <Title className='pop-title'>Tasks</Title>
@@ -145,9 +156,16 @@ const TaskPage = () => {
           setNewTask({ ...newTask, title: e.target.value });
         }}
       />
-
+      <Input
+        type="text"
+        className='title-input'
+        placeholder="Task Description"
+        value={newTask.description}
+        onChange={(e) => {
+          setNewTask({ ...newTask, description: e.target.value });
+        }}
+      />
       <Button className='task-add' onClick={handleAddTask}>Add Task</Button>
-
     </div>
   );
 
@@ -257,6 +275,26 @@ const TaskPage = () => {
     }
     return cb;
   }
+  const handleSaveEdit = async () => {
+    if (editingTask) {
+      try {
+        const collectionName = dbNames.getTaskCollection(projectId);
+        const taskRef = doc(db, collectionName, editingTask.id);
+        await setDoc(taskRef, { description: editingTask.description }, { merge: true });
+
+        const updatedTasks = tasks.map((task) =>
+          task.id === editingTask.id ? { ...task, description: editingTask.description } : task
+        );
+        setTasks(updatedTasks);
+
+        setEditingTask(null);
+        setEditModalVisible(false);
+      } catch (error) {
+        console.error('Error updating description:', error);
+      }
+    }
+  };
+
   return (
 
     <div>
@@ -283,11 +321,9 @@ const TaskPage = () => {
           <DragDropContext onDragEnd={onDragEnd}>
             <div className="kanban-board">
               {Object.keys(statusColumns).map((status) => (
-
                 <Droppable droppableId={status} key={status}>
                   {(provided) => (
                     <div
-                      // ${status.toLowerCase()}
                       className={`kanban-column`}
                       ref={provided.innerRef}
                     >
@@ -298,12 +334,15 @@ const TaskPage = () => {
                       {tasks
                         .filter((task) => task.status === status)
                         .map((task, index) => (
-                          <Draggable
-                            key={task.id}
-                            draggableId={task.id}
-                            index={index}
-                          >
-                            {(provided, snapshot) => (
+                         
+
+                      <Draggable
+                          key={task.id}
+                          draggableId={task.id}
+                          index={index}
+                        >
+                          {(provided, snapshot) => (
+                            <div>
                               <Card
                                 ref={provided.innerRef}
                                 {...provided.draggableProps}
@@ -311,6 +350,7 @@ const TaskPage = () => {
                                 className={`task-card ${status.toLowerCase()}`}
                               >
                                 <Title className={`k-card-title  ${statusTitleclr[task.status]}`}>{task.title}</Title>
+                                <p className='fnt mb-10'>{task.description}</p>
                                 <p className='fnt mb-10'>Creation Date:
                                   {task.timestamp instanceof Date
                                     ? task.timestamp.toLocaleDateString()
@@ -318,20 +358,46 @@ const TaskPage = () => {
                                       ? task.timestamp.toDate().toLocaleDateString()
                                       : task.timestamp && task.timestamp.seconds
                                         ? new Date(task.timestamp.seconds * 1000).toLocaleDateString()
-                                        : 'N/A'}</p>
-                                <div className='t-card-body'>
-
-
+                                        : 'N/A'}
+                                </p>
+                                <div className='t-card-body' style={{ display: 'flex', gap: '8px' }}>
                                   <div className={`task-status-container ${statusClr[task.status]}`}>
                                     <Text className='task-status'>{task.status}</Text>
                                   </div>
-                                  <DeleteOutlined onClick={() => {
-                                    handleDeleteTask(task.id)
-                                  }} />
+                                  <DeleteOutlined onClick={() => handleDeleteTask(task.id)} />
+                                  <EditOutlined onClick={() => handleEditTask(task.id)} />
+                                  {editingTask && editingTask.id === task.id && (
+                                    <Modal
+                                      title="Edit Task Description"
+                                      visible={editModalVisible}
+                                      onCancel={() => {
+                                        setEditingTask(null); 
+                                        setEditModalVisible(false); 
+                                      }}
+                                      footer={[
+                                        <Button key="cancel" onClick={() => setEditModalVisible(false)}>
+                                          Cancel
+                                        </Button>,
+                                        <Button key="save" type="primary" onClick={handleSaveEdit}>
+                                          Save
+                                        </Button>,
+                                      ]}
+                                    >
+                                      <Input
+                                        type="text"
+                                        value={editingTask.description}
+                                        onChange={(e) =>
+                                          setEditingTask({ ...editingTask, description: e.target.value })
+                                        }
+                                      />
+                                    </Modal>
+                                  )}
                                 </div>
                               </Card>
-                            )}
-                          </Draggable>
+                              {provided.placeholder}
+                            </div>
+                          )}
+                        </Draggable>
                         ))}
                       {provided.placeholder}
                     </div>
