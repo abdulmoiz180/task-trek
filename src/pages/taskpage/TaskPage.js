@@ -82,7 +82,7 @@ const TaskPage = () => {
     };
 
     fetchTasksData();
-  }, [projectId]);
+  }, [projectId, tasks]);
 
   async function handleAddTask() {
     if (newTask.title.trim() !== '') {
@@ -318,7 +318,7 @@ const TaskPage = () => {
                                       ? task.timestamp.toDate().toLocaleDateString()
                                       : task.timestamp && task.timestamp.seconds
                                         ? new Date(task.timestamp.seconds * 1000).toLocaleDateString()
-                                        : 'N/A'}</p>
+                                        : ''}</p>
                                 <div className='t-card-body'>
 
 
